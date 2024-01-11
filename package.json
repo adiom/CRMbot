@@ -1,0 +1,27 @@
+{
+  "name": "crmbot",
+  "version": "0.0.1",
+  "description": "Prototype of CRM for Amalgam",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/adiom/CRMbot.git"
+  },
+  "keywords": [
+    "Amalgam"
+  ],
+  "author": "2024 (c)",
+  "license": "SEE LICENSE IN CANFLY LICENSE",
+  "bugs": {
+    "url": "https://github.com/adiom/CRMbot/issues"
+  },
+  "homepage": "https://github.com/adiom/CRMbot#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "sqlite3": "^5.1.7",
+    "telegraf": "^4.15.3"
+  }
+}
