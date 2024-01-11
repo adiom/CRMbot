@@ -42,12 +42,62 @@ bot.action('register', (ctx) => {
 });
 
 // Обработчик кнопки "Задачи"
-bot.action('tasks', (ctx) => {
+// ...
+
+// Обработчик кнопки "Задачи"
+bot.action('tasks', async (ctx) => {
   const userId = ctx.from.id;
+  
   // Ваш код для отображения задач пользователя
-  // Можете использовать db.all для получения списка задач из базы данных
-  ctx.reply('Список ваших задач: ...');
+  const tasks = await getTasks(userId);
+  
+  if (tasks.length > 0) {
+    const tasksList = tasks.map((task, index) => `${index + 1}. ${task.task_text} - ${task.status}`).join('\n');
+    ctx.reply(`Список ваших задач:\n${tasksList}`);
+  } else {
+    ctx.reply('У вас пока нет задач.');
+  }
 });
+
+// Middleware для обработки текстовых сообщений
+bot.on('text', async (ctx) => {
+  const userId = ctx.from.id;
+  const taskText = ctx.message.text;
+
+  // Ваш код для записи текстового сообщения в задачи
+  await addTask(userId, taskText);
+
+  ctx.reply(`Задача добавлена: ${taskText}`);
+});
+
+// Функция для получения задач пользователя из базы данных
+async function getTasks(userId) {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM tasks WHERE user_id = ?', [userId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+// Функция для добавления задачи в базу данных
+async function addTask(userId, taskText) {
+  return new Promise((resolve, reject) => {
+    db.run('INSERT INTO tasks (user_id, task_text, status) VALUES (?, ?, ?)', [userId, taskText, 'в процессе'], (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+// ...
+
 
 // Обработчик кнопки "Статистика"
 bot.action('statistics', (ctx) => {
